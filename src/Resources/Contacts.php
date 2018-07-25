@@ -63,15 +63,18 @@ class Contacts extends Resource
     /**
      * @param array $contacts The contacts and properties.
      * @param array $params Array of optional parameters ['auditId']
+     * @param array $optionsOverrides Array of guzzle options to include in the request
      * @return \SevenShores\Hubspot\Http\Response
      */
-    function createOrUpdateBatch($contacts, $params = [])
+    function createOrUpdateBatch($contacts, $params = [], $optionsOverrides = [])
     {
         $endpoint = "https://api.hubapi.com/contacts/v1/contact/batch";
 
         $queryString = build_query_string($params);
 
-        $options['json'] = $contacts;
+        $options = array_merge([
+            'json' => $contacts
+        ], $optionsOverrides);
 
         return $this->client->request('post', $endpoint, $options, $queryString);
     }
